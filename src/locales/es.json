@@ -1,0 +1,30 @@
+{
+	"navbar": {
+		"title": "Job Browser",
+		"links": {
+			"general": "Vista General",
+			"search": "Buscador",
+			"user": {
+				"signIn": "Login",
+				"signUp": "Registrate"
+			}
+		}
+	},
+	"general": {
+		"title": "Vista General"
+	},
+	"search": {
+		"title": "Busqueda",
+		"total": "Total",
+		"transactions": "Transacciones",
+		"buys": "Compras",
+		"amounts": "Cantidades",
+		"fees": "Comisiones",
+		"sells": "Ventas"
+	},
+	"toast": {
+		"warn": "Alerta",
+		"error": "Error",
+		"success": "Éxito"
+	}
+}
