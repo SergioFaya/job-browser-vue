@@ -7,11 +7,22 @@ import i18n from './i18n'
 // sockets
 import socketio from 'socket.io-client';
 import VueSocketIO from 'vue-socket.io';
+// fontawesome
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 
 Vue.config.productionTip = true
 // cors for production
 // https://socket.io/docs/v3/handling-cors/
-export const SocketInstance = socketio('http://localhost:3000');
+const socketAddress = process.env.VUE_APP_SOCKET_IO_ADDRESS
+export const SocketInstance = socketio(socketAddress);
+
+// fontawesome
+library.add(faSearch)
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+
 
 Vue.use(new VueSocketIO({
 	debug: true,

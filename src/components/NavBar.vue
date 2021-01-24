@@ -3,7 +3,7 @@
     <h5 class="my-0 mr-md-auto font-weight-normal text-light"> {{ $t("navbar.title")  }} </h5>
     <nav class="my-2 my-md-0 mr-md-3">
         <a @click="setNavGeneral()" class="p-2 text-light" href="#">{{ $t("navbar.links.general")  }}</a>
-        <a @click="setNavWallet()" class="p-2 text-light" href="#">{{ $t("navbar.links.search")  }}</a>
+        <a @click="setNavSearch()" class="p-2 text-light" href="#">{{ $t("navbar.links.search")  }}</a>
     </nav>
     <a id="signUp" class="btn btn-outline-primary bg-primary text-light" href="#">{{ $t("navbar.links.user.signUp")  }}	</a>
 </div>
@@ -23,12 +23,10 @@ export default {
     },
     methods: {
         setNavGeneral: function () {
-            console.log("General");
             this.$emit("selectedNavChange", "General");
         },
-        setNavWallet: function () {
-            console.log("Wallet");
-            this.$emit("selectedNavChange", "Wallet");
+        setNavSearch: function () {
+            this.$emit("selectedNavChange", "Search");
         },
     },
     computed: {

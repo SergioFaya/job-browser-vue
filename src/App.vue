@@ -52,9 +52,7 @@ export default {
     };
   },
   mounted() {
-    // TODO: INITIALIZE KAFKA
     this.ready = true;
-    // this.initKafkaConsumer();
   },
   methods: {
     updateNav(name) {
@@ -96,9 +94,6 @@ export default {
       } else if (this.loadingCount <= 0) {
         this.loading = false;
       }
-    },
-    initKafkaConsumer() {
-      this.updateLoading(false);
     },
   },
 };
