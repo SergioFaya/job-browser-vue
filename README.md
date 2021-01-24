@@ -1,3 +1,13 @@
+# Build Docker
+Pasar a produccion
+https://es.vuejs.org/v2/cookbook/dockerize-vuejs-app.html
+```
+docker build -t sergiofaya/jobs-vue-app .
+
+docker run -it -p 81:80 --rm sergiofaya/jobs-vue-app:latest
+
+```
+
 # job-browser-vue
 Vue based app that is used as the browser of the jobs in a kafka topic
 
