@@ -33,19 +33,14 @@ export default {
   sockets: {
     connect() {
       // Fired when the socket connects.
-      this.isConnected = true;
-      this.updateWarn("coneccted");
+      this.updateWarn("Connected to adds");
     },
-
     disconnect() {
-      this.isConnected = false;
-      this.updateWarn("disconected");
+      this.updateWarn("Disconnected to adds");
     },
-
     // Fired when the server sends something on the "messageChannel" channel.
-    messageChannel(data) {
-      this.socketMessage = data;
-      this.updateWarn("New Message: ", data);
+    topic1(data) {
+      this.updateWarn(`New Message: ${data}`);
     },
   },
   data: () => {
