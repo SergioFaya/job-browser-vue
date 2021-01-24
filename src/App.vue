@@ -30,6 +30,24 @@ export default {
     Search,
     LoadingOverlayCustom,
   },
+  sockets: {
+    connect() {
+      // Fired when the socket connects.
+      this.isConnected = true;
+      this.updateWarn("coneccted");
+    },
+
+    disconnect() {
+      this.isConnected = false;
+      this.updateWarn("disconected");
+    },
+
+    // Fired when the server sends something on the "messageChannel" channel.
+    messageChannel(data) {
+      this.socketMessage = data;
+      this.updateWarn("New Message: ", data);
+    },
+  },
   data: () => {
     return {
       selectedNav: "Search",
