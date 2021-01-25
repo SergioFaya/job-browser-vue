@@ -1,6 +1,6 @@
 # Build Docker
 Pasar a produccion
-https://es.vuejs.org/v2/cookbook/dockerize-vuejs-app.html
+https://mherman.org/blog/dockerizing-a-vue-app/
 ```
 docker build -t sergiofaya/jobs-vue-app .
 
