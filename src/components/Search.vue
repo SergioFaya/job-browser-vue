@@ -17,14 +17,14 @@
 				{{job.company}} - {{job.title}}
 		</b-card-title>
 		<b-card-sub-title class="text-right">
-			{{job.location.country}}, {{job.location.city}} <span v-if="job.remote">en Remoto</span> |
+			<span v-if="job.location != null">{{job.location.country}}, {{job.location.city}}</span> <span v-if="job.remote">en Remoto</span> |
 			<span v-if="job.has_salary" class="text-right">
 				Min: {{job.salary.low}} Max: {{job.salary.high}} {{job.salary.currency}}
 			</span>
 		</b-card-sub-title>
 		<b-card-body >
 			<b-card-text>
-					{{job.description}}
+				<p v-html="job.description"></p>
 			</b-card-text>
 		</b-card-body>
 
@@ -48,52 +48,17 @@
 export default {
 	name: 'search',
 	components: {},
-	props: [],
+	props:  {
+		jobOffers: {
+        type: Array,
+        default: () => [],
+      }
+	},
 	mounted() {
 		this.$emit('loading', false);
 	},
 	data() {
 		return {
-			jobOffers: [
-				{
-					url_link: "www.google.es",
-					has_salary: true,
-					salary: {
-						high: 12.34,
-						low: 11.00,
-						currency: "EUR",
-					},
-					description: "description",
-					company: "LandingJobs",
-					location: {
-						country: "España",
-						city: "Oviedo"
-					},
-					title: "Titulo 1",
-					published_at: "fecha",
-					remote: true,
-					tags: ['java', 'ts', 'jose', 'luis'],
-				},
-				{
-					url_link: "www.google.es",
-					has_salary: true,
-					salary: {
-						high: 12.34,
-						low: 11.00,
-						currency: "EUR",
-					},
-					description: "description",
-					company: "Company",
-					location: {
-						country: "España",
-						city: "Oviedo"
-					},
-					title: "Titulo 2",
-					published_at: "fecha",
-					remote: false,
-					tags: ['java'],
-				}
-			]
 		}
 	},
 	methods: {

@@ -5,6 +5,8 @@
     <div v-if="ready" class="container justify-content-start">
       <keep-alive>
         <component
+          :jobOffers="jobOffers"
+          :tags="tags"
           v-on:loading="updateLoading"
           v-on:errorMsg="updateError"
           v-on:warnMsg="updateWarn"
@@ -39,16 +41,23 @@ export default {
       this.updateWarn("Disconnected to adds");
     },
     // Fired when the server sends something on the "messageChannel" channel.
-    topic1(data) {
-      this.updateWarn(`New Message: ${data}`);
+    "job-offer-topic"(data) {
+      const message = JSON.parse(data);
+      this.updateWarn(`New Message: ${message.title}`);
+      message.tags.forEach((tag) => {
+        this.tags.push(tag.toUpperCase());
+      });
+      this.jobOffers.push(message);
     },
   },
   data: () => {
     return {
-      selectedNav: "Search",
+      selectedNav: "General",
       loading: true,
       loadingCount: 0,
       ready: false,
+      jobOffers: [],
+      tags: ["JAVA", "SQL", "SQL", "NODE", "NODE", "NODE"],
     };
   },
   mounted() {
