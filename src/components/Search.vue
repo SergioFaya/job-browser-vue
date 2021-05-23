@@ -17,9 +17,9 @@
 				{{job.company}} - {{job.title}}
 		</b-card-title>
 		<b-card-sub-title class="text-right">
-			<span v-if="job.location != null">{{job.location.country}}, {{job.location.city}}</span> <span v-if="job.remote">en Remoto</span> |
+			<span v-if="job.location != null">{{job.location.country}}, {{job.location.city}}</span> <span v-if="job.remote">en Remoto</span>
 			<span v-if="job.has_salary" class="text-right">
-				Min: {{job.salary.low}} Max: {{job.salary.high}} {{job.salary.currency}}
+				| Min: {{job.salary.low}} Max: {{job.salary.high}} {{job.salary.currency}}
 			</span>
 		</b-card-sub-title>
 		<b-card-body >
@@ -37,7 +37,7 @@
 		</div>
 		<!-- <b-card-text>{{account}}</b-card-text> -->
 		<!-- <b-button variant="light" @click="visitSite(job.url_link)">{{ $t("search.transactions")}}</b-button> -->
-		<b-button class="text-center" variant="light" @click="visitSite(job.url_link)">{{ job.url_link}}</b-button>
+		<b-link variant="light" class="btn text-center btn-light" :href="job.url_link" target="_blank">Ver el sitio</b-link>
 	</b-card>
 
 </section>
@@ -63,7 +63,8 @@ export default {
 	},
 	methods: {
 		visitSite(url){
-			console.log(url);
+			let routeData = this.$router.resolve({name: url, query: {}});
+			window.open(routeData.href, '_blank');
 		}
 	},
 	computed: {
