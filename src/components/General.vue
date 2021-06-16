@@ -3,14 +3,14 @@
     <h2>{{ $t("general.title")  }} </h2>
 
     <line-chart v-if="loaded" :chartdata="lineChartData" :options="lineChartOptions"></line-chart>
-    <bar-chart v-if="loaded" :chartdata="barChartData" :options="barOptions"/>
+    <bar-chart v-if="loadedBarChart" :chartdata="barChartData" :options="barOptions"/>
 </section>
 </template>
 
 <script lang="js">
 import LineChart from './charts/LineChart.js'
 import BarChart from './charts/BarChart.js'
-
+import axios from 'axios'
 
 export default {
     name: 'general',
@@ -25,11 +25,12 @@ export default {
 		await this.getLineChartData();
 		await this.getBarChartData();
 		this.$emit('loading', false)
-		this.loaded = true;
     },
     data() {
         return {
-			loaded: false,
+			loadedBarChart: false,
+			proxyHost: process.env.VUE_APP_PROXY_HOST,
+			tags: process.env.VUE_APP_TAGS.split(","),
             lineChartData: {
                 labels: [],
                 datasets: [{
@@ -41,7 +42,6 @@ export default {
                 }]
 
 			},
-			tags: [],
 			barChartData: {
 				labels: this.tags,
 				datasets: [
@@ -75,16 +75,34 @@ export default {
 			// request data
 			// usage example:
 		},
-		getBarChartData(){
-			const uniqueTags = this.tags.filter(this.onlyUnique);
+		async getBarChartData(){
+			const uniqueTags = this.tags;
 			this.barChartData.labels = uniqueTags
-			uniqueTags.forEach(tag => {
-				const tagCount = this.tags.filter(item => item === tag).length;
-				this.barChartData.datasets[0].data.push(tagCount);
-			});
+			await this.getJobsTags()
 		},
-		onlyUnique(value, index, self) {
-			return self.indexOf(value) === index;
+		getJobsTags() {
+			this.$emit('loading', true);
+			const host = this.proxyHost;
+
+			axios
+			.get(host+'/charts/bar')
+			.then(response =>{
+				const jobTags=response.data
+
+				jobTags.forEach(jobTag => {
+					if (this.tags.includes(jobTag.tag)) {
+						this.barChartData.labels.push(jobTag.tag)
+						this.barChartData.datasets[0].data.push(jobTag.count)
+					}
+				});
+			})
+			.catch(err => {
+				this.$emit('warnMsg', "Cannot receive data, " +err);
+			})
+			.then(() => {
+				this.$emit('loading', false);
+				this.loadedBarChart = true
+			})
 		}
     },
     computed: {

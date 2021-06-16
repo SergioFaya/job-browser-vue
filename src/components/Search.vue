@@ -31,7 +31,7 @@
 		</div>
 	</b-card>
 
-	<b-card v-for="job in jobOffers" :key="job.title" bg-variant="dark" text-variant="white" class="text-left mb-4">
+	<b-card v-for="job in jobOffers" :key="JSON.stringify(job)" bg-variant="dark" text-variant="white" class="text-left mb-4">
 		<b-card-title>
 			<img class="mr-2" src="@/assets/landingjobs-logo.png" alt="Landing Jobs" height="50px" />
 				{{job.company}} - {{job.title}}
