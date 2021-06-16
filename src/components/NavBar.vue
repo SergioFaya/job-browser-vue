@@ -5,7 +5,7 @@
         <a @click="setNavGeneral()" class="p-2 text-light" href="#">{{ $t("navbar.links.general")  }}</a>
         <a @click="setNavSearch()" class="p-2 text-light" href="#">{{ $t("navbar.links.search")  }}</a>
     </nav>
-    <a id="signUp" class="btn btn-outline-primary bg-primary text-light" href="#">{{ $t("navbar.links.user.signUp")  }}	</a>
+    <!-- <a id="signUp" class="btn btn-outline-primary bg-primary text-light" href="#">{{ $t("navbar.links.user.signUp")  }}	</a> -->
 </div>
 </template>
 

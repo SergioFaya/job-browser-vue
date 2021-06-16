@@ -1,11 +1,31 @@
 <template lang="html">
 <section class="search">
 	<h2> {{ $t("search.title")}}</h2>
+	<b-card bg-variant="secondary" class="text-left mt-4 mb-4">
+		<p>Búsqueda por texto</p>
+		<div class="input-group">
+			<input id ="search" type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon"  v-model="query"/>
+			<button  v-on:click="sendSearchQuery()" type="button" class="btn btn-primary">
+				<font-awesome-icon :icon="['fas', 'search']" />
+			</button>
+		</div>
+	</b-card>
 
 	<b-card bg-variant="secondary" class="text-left mt-4 mb-4">
+		<p>Búsqueda por palabras clave</p>
 		<div class="input-group">
-			<input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-			<button type="button" class="btn btn-primary">
+			<b-form-select v-model="selectedKeyword" :options="options" class="form-control rounded" placeholder="Tags"></b-form-select>
+			<button  v-on:click="findJobsByKeyword()" type="button" class="btn btn-primary">
+				<font-awesome-icon :icon="['fas', 'search']" />
+			</button>
+		</div>
+	</b-card>
+
+	<b-card bg-variant="secondary" class="text-left mt-4 mb-4">
+		<p>Búsqueda por salario</p>
+		<div class="input-group">
+			<b-form-input v-model="salaryQuery" type="number" step="100" min="0.00"></b-form-input>
+			<button  v-on:click="findJobsBySalary()" type="button" class="btn btn-primary">
 				<font-awesome-icon :icon="['fas', 'search']" />
 			</button>
 		</div>
@@ -44,27 +64,111 @@
 </template>
 
 <script lang="js">
+import axios from 'axios'
 
 export default {
 	name: 'search',
 	components: {},
 	props:  {
-		jobOffers: {
-        type: Array,
-        default: () => [],
-      }
+
 	},
 	mounted() {
 		this.$emit('loading', false);
+		this.sendSearchQuery();
+		this.tags.split(",").forEach(element => {
+				this.options.push({ value: element, text: element });
+			});
 	},
 	data() {
 		return {
+			jobOffers: [],
+			query: "",
+			proxyHost: process.env.VUE_APP_PROXY_HOST,
+			selectedKeyword: null,
+			salaryQuery: 1000,
+			options: [
+				{ value: null, text: 'Selecciona una opción' },
+			],
+			tags: process.env.VUE_APP_TAGS
 		}
 	},
 	methods: {
 		visitSite(url){
 			let routeData = this.$router.resolve({name: url, query: {}});
 			window.open(routeData.href, '_blank');
+		},
+		sendSearchQuery(){
+			if(this.query === ""){
+				this.findAllJobs();
+			}else{
+				this.findJobsByContent(this.query);
+			}
+
+		},
+		findAllJobs() {
+			this.$emit('loading', true);
+			const host = this.proxyHost;
+			axios
+			.get(host+'/')
+			.then(response =>{
+				this.jobOffers=response.data
+			})
+			.catch(err => {
+				this.$emit('warnMsg', "Cannot receive data, " +err);
+			})
+			.then(() => {
+				this.$emit('loading', false);
+			})
+		},
+		findJobsByContent(query) {
+			this.$emit('loading', true);
+			const host = this.proxyHost;
+			const url = host + '/content/'+query;
+			axios
+			.get(url)
+			.then(response =>{
+				this.jobOffers=response.data
+			})
+			.catch(err => {
+				this.$emit('warnMsg', "Cannot receive data, " +err);
+			})
+			.then(() => {
+				this.$emit('loading', false);
+			})
+		},
+		findJobsBySalary() {
+			this.$emit('loading', true);
+			const host = this.proxyHost;
+			const salary = this.salaryQuery;
+			const url = host + '/salary/'+salary;
+			axios
+			.get(url)
+			.then(response =>{
+				this.jobOffers=response.data
+			})
+			.catch(err => {
+				this.$emit('warnMsg', "Cannot receive data, " +err);
+			})
+			.then(() => {
+				this.$emit('loading', false);
+			})
+		},
+		findJobsByKeyword(){
+			this.$emit('loading', true);
+			const host = this.proxyHost;
+			const tag = this.selectedKeyword;
+			const url = host + '/tags/'+tag;
+			axios
+			.get(url)
+			.then(response =>{
+				this.jobOffers=response.data
+			})
+			.catch(err => {
+				this.$emit('warnMsg', "Cannot receive data, " +err);
+			})
+			.then(() => {
+				this.$emit('loading', false);
+			})
 		}
 	},
 	computed: {

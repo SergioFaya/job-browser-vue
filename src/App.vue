@@ -6,7 +6,6 @@
       <keep-alive>
         <component
           :jobOffers="jobOffers"
-          :tags="tags"
           v-on:loading="updateLoading"
           v-on:errorMsg="updateError"
           v-on:warnMsg="updateWarn"
@@ -44,9 +43,6 @@ export default {
     "job-offer-topic"(data) {
       const message = JSON.parse(data);
       this.updateWarn(`New Message: ${message.title}`);
-      message.tags.forEach((tag) => {
-        this.tags.push(tag.toUpperCase());
-      });
       this.jobOffers.push(message);
     },
   },
@@ -57,7 +53,6 @@ export default {
       loadingCount: 0,
       ready: false,
       jobOffers: [],
-      tags: ["JAVA", "SQL", "SQL", "NODE", "NODE", "NODE"],
     };
   },
   mounted() {

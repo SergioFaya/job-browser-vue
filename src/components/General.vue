@@ -19,10 +19,6 @@ export default {
         BarChart
     },
 	props: {
-		tags: {
-			type: Array,
-			default: () => [],
-		}
 	},
     async mounted() {
 		this.$emit('loading', true)
@@ -45,6 +41,7 @@ export default {
                 }]
 
 			},
+			tags: [],
 			barChartData: {
 				labels: this.tags,
 				datasets: [
