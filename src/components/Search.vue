@@ -181,6 +181,4 @@ export default {
 .card-subtitle {
   color: #fff !important;
 }
-.search {
-}
 </style>
