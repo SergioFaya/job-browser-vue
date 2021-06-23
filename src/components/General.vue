@@ -28,6 +28,7 @@ export default {
     },
     data() {
         return {
+			loaded: false,
 			loadedBarChart: false,
 			proxyHost: process.env.VUE_APP_PROXY_HOST,
 			tags: process.env.VUE_APP_TAGS.split(","),
@@ -43,10 +44,10 @@ export default {
 
 			},
 			barChartData: {
-				labels: this.tags,
+				labels: [],
 				datasets: [
 					{
-						label: "Trabajos con tecnologías",
+						label: "Trabajos por tecnologías",
 						backgroundColor: '#f87979',
 						data: []
 					}
@@ -76,8 +77,6 @@ export default {
 			// usage example:
 		},
 		async getBarChartData(){
-			const uniqueTags = this.tags;
-			this.barChartData.labels = uniqueTags
 			await this.getJobsTags()
 		},
 		getJobsTags() {
@@ -89,11 +88,9 @@ export default {
 			.then(response =>{
 				const jobTags=response.data
 
-				jobTags.forEach(jobTag => {
-					if (this.tags.includes(jobTag.tag)) {
+				jobTags?.forEach(jobTag => {
 						this.barChartData.labels.push(jobTag.tag)
 						this.barChartData.datasets[0].data.push(jobTag.count)
-					}
 				});
 			})
 			.catch(err => {

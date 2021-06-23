@@ -31,21 +31,21 @@ export default {
     Search,
     LoadingOverlayCustom,
   },
-  sockets: {
-    connect() {
-      // Fired when the socket connects.
-      this.updateWarn("Connected to adds");
-    },
-    disconnect() {
-      this.updateWarn("Disconnected to adds");
-    },
-    // Fired when the server sends something on the "messageChannel" channel.
-    "job-offer-topic"(data) {
-      const message = JSON.parse(data);
-      this.updateWarn(`New Message: ${message.title}`);
-      this.jobOffers.push(message);
-    },
-  },
+  //   sockets: {
+  //     connect() {
+  //       // Fired when the socket connects.
+  //       this.updateWarn("Connected to adds");
+  //     },
+  //     disconnect() {
+  //       this.updateWarn("Disconnected to adds");
+  //     },
+  //     // Fired when the server sends something on the "messageChannel" channel.
+  //     "job-offer-topic"(data) {
+  //       const message = JSON.parse(data);
+  //       this.updateWarn(`New Message: ${message.title}`);
+  //       this.jobOffers.push(message);
+  //     },
+  //   },
   data: () => {
     return {
       selectedNav: "General",

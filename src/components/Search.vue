@@ -33,7 +33,8 @@
 
 	<b-card v-for="job in jobOffers" :key="JSON.stringify(job)" bg-variant="dark" text-variant="white" class="text-left mb-4">
 		<b-card-title>
-			<img class="mr-2" src="@/assets/landingjobs-logo.png" alt="Landing Jobs" height="50px" />
+			<!-- <img class="mr-2" src="@/assets/landingjobs-logo.png" alt="Landing Jobs" height="50px" /> -->
+			<img  v-if="job.company_logo_url != null" v-bind:src="job.company_logo_url" alt="Company"  height="50px"/>
 				{{job.company}} - {{job.title}}
 		</b-card-title>
 		<b-card-sub-title class="text-right">
@@ -72,12 +73,11 @@ export default {
 	props:  {
 
 	},
-	mounted() {
+	async mounted() {
+		this.$emit('loading', true);
+		await this.fetchTags();
+		await this.sendSearchQuery();
 		this.$emit('loading', false);
-		this.sendSearchQuery();
-		this.tags.split(",").forEach(element => {
-				this.options.push({ value: element, text: element });
-			});
 	},
 	data() {
 		return {
@@ -89,13 +89,31 @@ export default {
 			options: [
 				{ value: null, text: 'Selecciona una opción' },
 			],
-			tags: process.env.VUE_APP_TAGS
+			tags: []
 		}
 	},
 	methods: {
 		visitSite(url){
 			let routeData = this.$router.resolve({name: url, query: {}});
 			window.open(routeData.href, '_blank');
+		},
+		fetchTags(){
+			this.$emit('loading', true);
+			const host = this.proxyHost;
+			axios
+			.get(host+'/tags')
+			.then(response =>{
+				this.tags=response.data;
+				this.tags.forEach(element => {
+				this.options.push({ value: element, text: element });
+			});
+			})
+			.catch(err => {
+				this.$emit('warnMsg', "Cannot receive data, " +err);
+			})
+			.then(() => {
+				this.$emit('loading', false);
+			})
 		},
 		sendSearchQuery(){
 			if(this.query === ""){
